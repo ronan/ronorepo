@@ -1,8 +1,9 @@
 ### Model-Driven-Engineering
 
 Todo:
+```
 [ ] Better name
-[ ] Better file ending
+[ ? ] Better file ending
 [ ] More elaborate demo
     [ ] Drupal Site
     [ ] Django App
@@ -13,3 +14,6 @@ Todo:
     [ ] JS
     [ ] C
     [ ] Something new (Rust, go, Clojure, whatever)
+[ ] Dual mode highlighting
+[ ] Synced scroll and source line mapping
+```

@@ -38,9 +38,7 @@ def build(src_path):
     
         from chevron import render
         with open(src_path, 'r') as src_file:
-            
-            dst_path = f'./dst/{src_path[6:-9]}'
-
+            dst_path = f'./dst/{src_path[6:-2]}'
             with open(dst_path, 'w+') as dest_file:
                 logging.info(f'🖊️ Saving to 📄 {dst_path}')
                 dest_file.write(render(src_file, model))
@@ -52,7 +50,7 @@ if __name__ == "__main__":
         )
 
     import sys
-    src_path = sys.argv[1] if len(sys.argv) > 1 else './src/test.txt.mustache'
+    src_path = sys.argv[1] if len(sys.argv) > 1 else './src/test.txt#t'
 
     from time import time
     logging.info(f'🔨Build started 📄 {src_path}')
