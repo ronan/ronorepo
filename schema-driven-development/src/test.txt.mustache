@@ -1,0 +1,19 @@
+This is a test {{Test._test}}
+
+Field:
+    {{User.Phone._name}}
+
+Fields:
+    {{#User}}
+        {{# _fields }}
+        {{ _name }} ({{ _type }})
+        {{/ _fields }}
+        {{# Address }}
+            {{# _fields }}
+            {{ _name }} ({{ _type }})
+            {{/ _fields }}
+        {{/Address}}
+    {{/User}}
+
+Field:
+    {{Types.String._name}}

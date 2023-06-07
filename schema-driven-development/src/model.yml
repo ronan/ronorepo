@@ -1,0 +1,40 @@
+# An example of a schema file
+Types:
+  String: str
+  Text: txt
+  Integer: int
+  Float: float
+  Boolean: bool
+  Enumeration: enum
+  Dictionary: dict
+
+Test:
+  _test: "Hello, World"
+
+User: 
+  _is_pii: true
+
+  First: str
+  Last: str
+  Phone:
+    _type: str
+    _sub_type: phone
+    _max_length: 16
+
+  Address:
+    _type: dict
+    _multiple: true
+    _min: 1
+    _max: 5
+    Nickname: str
+    IsPrimary: bool
+    Street: str
+    Street2: str
+    City: str
+    State:
+      _type: enum
+      _values:
+        - Alabama
+        - Others
+    Zip: str
+
