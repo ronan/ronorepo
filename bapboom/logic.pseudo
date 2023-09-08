@@ -1,0 +1,79 @@
+
+pattern = [
+    # Settings
+    # -
+    # -
+    # -
+    0b1000000010110000 // peep
+    0b1111111111111111 // chik
+    0b0000100000001000 // bapp
+    0b1000000010000000 // boom
+];
+
+# rows
+# Settings
+# -
+# -
+# peep
+
+struct state {
+  UInt16[4] pattern;
+  UInt16 vol
+  UInt16 tempo
+  UInt16 loop
+  UInt16 pitch
+  UInt16 reverb
+  UInt16 feel // swing -> dilla
+  UInt16 LPF;
+  UInt16 HPF;
+}
+
+# 4-bit config
+# 16 values = 4 bits
+# 16 lights represenbt the 16 values.
+# 16 things can be controlled
+# Each light on the top row is a thing to be controlled
+# 16x4 bits = 64bits = 8 bytes per "config"
+# Each instrument has 2 voices
+# Each voice has 8 variables
+
+struct voice {
+  UInt4 vol;
+
+  UInt4 pitch;
+  UInt4 wave;
+  UInt4 attack;
+  UInt4 decay;
+
+  UInt4 reverb;
+  UInt4 LPF;
+  UInt4 HPF;
+}
+
+
+Pallette:
+#f44336;0xF206
+#e81e63;0xE8EC
+#9c27b0;0x9936
+#673ab7;0x61D6
+#3f51b5;0x3A96
+#2196f3;0x24BE
+#03a9f4;0x055E
+#00bcd4;0x05FA
+#009688;0x04B1
+#4caf50;0x4D6A
+#8bc34a;0x8E09
+#cddc39;0xCEE7
+#ffeb3b;0xFF47
+#ffc107;0xFE00
+#ff9800;0xFCC0
+#ff5722;0xFAA4
+
+
+int col;
+int row;
+
+on_click:
+
+    pattern[row] ^= i<<col
+
