@@ -13,7 +13,8 @@
 				"ZainChen.json",
 				"SimonSiefke.svg-preview",
 				"ms-python.isort",
-				"ms-python.vscode-pylance"
+				"ms-python.vscode-pylance",
+				"yzhang.markdown-all-in-one"
 			]
 		}
 	}
