@@ -11,8 +11,9 @@
 		"vscode": {
 			"extensions": [
 				"ZainChen.json",
-				"Meezilla.json",
-				"SimonSiefke.svg-preview"
+				"SimonSiefke.svg-preview",
+				"ms-python.isort",
+				"ms-python.vscode-pylance"
 			]
 		}
 	}
