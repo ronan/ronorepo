@@ -43,5 +43,5 @@ Ultimately the code could be ported CircuitPython/MicroPython or to an Arduino s
 
 ## TODO
 
-- Add hourly temperature forcast using colors
-- Run the logic on the esp directly
+- [x] Add hourly temperature forcast using colors
+- [ ] Run the logic on the esp directly

@@ -2,28 +2,25 @@
 # usage: 
 #   python dayboard.py [hours] [minutes]
 # Run:
-#   watch -n 30 'date "+%H %M" --date="5 hours ago" | xargs python dayboard.py'
+#   watch -n 30 'date "+%H %M" | xargs python dayboard.py'
 
 import json
 import math
-import os
 import sys
 import urllib
+import time
 
 import requests
 
-TZ                  = "America/Chicago"
-LAT                 = "44.841"
-LON                 = "-93.1097",
-
-DAY_START           = 6     # 6am
-NUM_HOURS           = 18    # 6am-midnight
-LEDS_PER_HOUR       = 6     # ~30" of 144/m led strip. 6 leds x 18 hrs = 108 leds per day
+DAY_START           = 6                     # 6am
+NUM_HOURS           = 18                    # 6am-midnight
+LEDS_PER_HOUR       = 6                     # ~30" of 144/m led strip. 6 leds x 18 hrs = 108 leds per day
 
 LED_START_INDEX     = 10
+GEOCODE_CACHE_TIME  = 60 * 60 * 24 * 7      # Re-check the location every 7 days
+WEATHER_CACHE_TIME  = 60 * 60 * 2           # Re-check the weather every 2 hours
 
 WLED_JSON_API_URL   = "http://dayboard.local/json"
-WEATHER_API_URL     = "https://api.open-meteo.com/v1/forecast"
 
 PAST                = [0, 0, 0]
 FUTURE              = [100, 100, 70]
@@ -55,38 +52,65 @@ def pp(x):
     from pprint import pprint
     pprint(x)
 
-def get_colors():
-    colors = [FUTURE] * NUM_HOURS * LEDS_PER_HOUR
+def cache(key, value=None, max_age=None):
+    now = time.time()
+    import shelve
+    with shelve.open("dayboard.cache") as db:
+        cache_entry = db.get(key, {})
+        if value:
+            db[key] = {"updated_at": now, "value": value}
+        if not max_age or now - cache_entry.get("updated_at", 0) < max_age:
+            return cache_entry.get("value")
+        return None
 
-    try:
-        print('Fetching weather data...')
-        qs = urllib.parse.urlencode({
-            "latitude":         "44.841",
-            "longitude":        "-93.1097",
-            "timezone":         TZ,
-            "forecast_days":    "1",
-            "hourly":           "apparent_temperature",
-            "temperature_unit": "fahrenheit",
-        })
+def get_geocode():
+    print('Reading geolocation from cache...')
+    geocode = cache('geocode', max_age=GEOCODE_CACHE_TIME)
+    if not geocode:
+        print('Geolocating.. Beep. Boop. Bop. 🌎🌍🌏')
+        import geocoder
+        g = geocoder.ip('me')
+        geocode = {
+            "latitude":  g.latlng[0],
+            "longitude": g.latlng[0],
+            "timezone":  g.raw.get('timezone', 'UTC')
+        }
+        print(f"Geolocated at {geocode['latitude']}, {geocode['longitude']} {geocode['timezone']}")
+        cache('geocode', geocode)
+    return geocode
+
+def get_colors():
+    print('Reading led color data from cache...')
+    colors = cache('colors', max_age=WEATHER_CACHE_TIME)
+    if not colors:
+        colors = [FUTURE] * NUM_HOURS * LEDS_PER_HOUR
+        print('Fetching weather from the cloud. 🌦️')
+        qs = urllib.parse.urlencode(dict(
+            {
+                "forecast_days":    "1",
+                "hourly":           "apparent_temperature",
+                "temperature_unit": "fahrenheit",
+            },
+            **get_geocode()
+            ))
         temps = requests.get(f"https://api.open-meteo.com/v1/forecast?{qs}").json()
 
         for i in range(NUM_HOURS):
             idx = math.floor((temps['hourly']['apparent_temperature'][i + DAY_START]+ 40) / 10)
             colors[i*LEDS_PER_HOUR:(i*LEDS_PER_HOUR)+LEDS_PER_HOUR] = [TEMPS[idx]] * LEDS_PER_HOUR
 
-    except Exception as e:
-        print(f"Could not get weather data: {e}")
-    
+        cache('colors', colors)
     return colors
 
 def draw_board(hour, minute):
     print(f"Drawing Board: {hour}:{minute}")
 
     if hour >= DAY_START:
-        # Hours
+        colors = get_colors()
+
         start = int(((hour - DAY_START) + (minute / 60)) * LEDS_PER_HOUR)
-        
-        leds = [PAST]*start + get_colors()[start:]
+
+        leds = [PAST]*start + colors[start:]
 
         # Print the colorful little dots to stdout for no reason except it's fun
         print("".join([f'\033[38;2;{led[0]};{led[1]};{led[2]}m•\033[0m' for led in leds]))
@@ -108,7 +132,5 @@ if len(sys.argv) >= 3:
     minute = int(sys.argv[2])
     draw_board(hour, minute)
 else:
-    from zoneinfo import ZoneInfo
-    from datetime import datetime
-    t = datetime.now(ZoneInfo(TZ))
-    draw_board(t.hour, t.minute)
+    t = time.localtime()
+    draw_board(t.tm_hour, t.tm_min)

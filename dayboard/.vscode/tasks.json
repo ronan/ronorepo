@@ -6,7 +6,7 @@
         {
             "label": "Run Dayboard",
             "type": "shell",
-            "command": "watch 'date \"+%H %M\" --date=\"5 hours ago\" | xargs python dayboard.py'",
+            "command": "watch --color 'python dayboard.py'",
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
