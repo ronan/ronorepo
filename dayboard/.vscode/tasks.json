@@ -6,12 +6,42 @@
         {
             "label": "Run Dayboard",
             "type": "shell",
-            "command": "watch --color 'python dayboard.py'",
+            "command": "watch -n 60 --color 'python dayboard.py'",
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
             },
             "problemMatcher": []
+        },
+        { // TODO: Change this to a file watcher
+            "label": "Develop Dayboard",
+            "type": "shell",
+            "command": "watch -n 10 --color 'python dayboard.py'",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clear Cache",
+            "type": "shell",
+            "command": "rm -rf dayboard.cache",
+            "presentation": {
+                "reveal": "never",
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Container",
+            "type": "shell",
+            "command": "docker build -t ronan4000/dayboard -f containerfile .",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+            
         }
     ]
 }

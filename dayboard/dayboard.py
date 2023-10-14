@@ -4,13 +4,15 @@
 # Run:
 #   watch -n 30 'date "+%H %M" | xargs python dayboard.py'
 
-import json
 import math
+import os
 import sys
-import urllib
 import time
+import urllib
 
 import requests
+import pytz
+
 
 DAY_START           =   6                     # 6am
 NUM_HOURS           =   18                    # 6am-midnight
@@ -77,6 +79,7 @@ def get_geocode():
         }
         print(f"Geolocated at {geocode['latitude']}, {geocode['longitude']} {geocode['timezone']}")
         cache('geocode', geocode)
+    print(f"Geolocated at {geocode['latitude']}, {geocode['longitude']} {geocode['timezone']}")
     return geocode
 
 def get_colors():
@@ -94,10 +97,10 @@ def get_colors():
             **get_geocode()
             ))
         temps = requests.get(f"https://api.open-meteo.com/v1/forecast?{qs}").json()
-
+        pp(temps)
         for i in range(NUM_HOURS):
             idx = math.floor((temps['hourly']['apparent_temperature'][i + DAY_START]+ 40) / 10)
-            colors[i*LEDS_PER_HOUR:(i*LEDS_PER_HOUR)+LEDS_PER_HOUR] = [COLOR_TEMPS[idx]] * LEDS_PER_HOUR
+            colors[i*LEDS_PER_HOUR:(i*LEDS_PER_HOUR)+LEDS_PER_HOUR] = [COLOR_TEMPS[18-idx]] * LEDS_PER_HOUR
 
         cache('colors', colors)
     return colors
@@ -106,21 +109,27 @@ def render(hour, minute, day=-1):
     print(f"Drawing Board: {hour}:{minute}")
 
     if hour >= DAY_START:
-        colors = get_colors()
-        start = int(((hour - DAY_START) + (minute / 60)) * LEDS_PER_HOUR)
-        leds = [COLOR_BG]*10 + [COLOR_PAST]*start + colors[start:]
+        colors = [FUTURE] * NUM_HOURS * LEDS_PER_HOUR
+        try:
+            colors = get_colors()
+        except Exception as e:
+            print("Could not fetch colors.")
+            pp(e)
 
-        if day:
-            leds[day] = DAY_MARKER
-
-        payload = {
-            "on": True,
-            "bri": BRIGHTNESS,
-            "seg": [{ "i": leds },]
-        }
+        leds = [COLOR_BG]*10 + colors
 
         # Print the colorful little dots to stdout for no reason except it's fun
         print("".join([f'\033[38;2;{led[0]};{led[1]};{led[2]}m•\033[0m' for led in leds]))
+
+        start = int(((hour - DAY_START) + (minute / 60)) * LEDS_PER_HOUR) + 10
+        leds[:start] = [COLOR_PAST]*start
+
+        if day > -1: leds[day] = DAY_MARKER
+
+        print("".join([f'\033[38;2;{led[0]};{led[1]};{led[2]}m•\033[0m' for led in leds]))
+
+        payload = {"on": True, "bri": BRIGHTNESS, "seg": [{ "i": leds },]}
+
     else:
         payload = {"on": False}
         print("Night mode")
@@ -128,11 +137,25 @@ def render(hour, minute, day=-1):
     if payload:
         requests.post(WLED_JSON_API_URL, json=payload)
 
-
-t    = time.localtime()
 args = dict(enumerate(sys.argv))
-render( 
-    int(args.get(1, t.tm_hour)), 
-    int(args.get(2, t.tm_hour)),
-    int(args.get(3, t.tm_wday))
-)
+
+try:
+    os.environ['TZ'] = get_geocode()['timezone']
+    time.tzset()
+except:
+    print("Could not geolocate")
+
+if len(args) > 1:
+    render( 
+        int(args.get(1, 12)), 
+        int(args.get(2, 0)),
+        int(args.get(3, 0))
+    )
+else:
+    while True:
+        print("Updating dayboard...")
+        t = time.localtime()
+        render(t.tm_hour, t.tm_min, t.tm_wday)
+        print("Sleeping for 300 seconds...")
+        time.sleep(300)
+
