@@ -16,4 +16,5 @@ Todo:
     [ ] Something new (Rust, go, Clojure, whatever)
 [ ] Dual mode highlighting
 [ ] Synced scroll and source line mapping
+[ ] Fauna db
 ```
