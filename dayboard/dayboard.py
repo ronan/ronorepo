@@ -22,7 +22,7 @@ LED_START_INDEX     =   10
 GEOCODE_CACHE_TIME  =   60 * 60 * 24 * 7      # Re-check the location every 7 days
 WEATHER_CACHE_TIME  =   60 * 60 * 2           # Re-check the weather every 2 hours
 
-WLED_JSON_API_URL   =   "http://dayboard.local/json"
+WLED_JSON_API_URL   =   "http://192.168.0.33/json"
 
 BRIGHTNESS          =   50 # 0-255
 
