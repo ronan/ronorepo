@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ingress:
+    container_name: ingress
+    image: traefik
+    ports:
+      - 443:443
+      - 80:80
+
+  dashboard:
+    container_name: dashboard
+    image: lscr.io/linuxserver/heimdall:latest
+    restart: unless-stopped
+    ports:
+      - 8888:80
+
+  dayboard:
+    build: 
+      context: ../dayboard
+      dockerfile: containerfile
+    restart: unless-stopped

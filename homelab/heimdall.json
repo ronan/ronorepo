@@ -1,0 +1,58 @@
+[
+    {
+      "title": "Portainer",
+      "colour": "#161b1f",
+      "url": "https://192.168.0.250:9443",
+      "description": "{\"enabled\":\"0\",\"dataonly\":\"1\",\"override_url\":null,\"username\":null,\"password\":null,\"ignore_tls\":\"0\"}",
+      "appid": "07b796b3a10eaa8b6f485ed2379187a39400b459",
+      "appdescription": "Portainer is a simple management solution for Docker. Easily manage your Docker hosts and Docker Swarm clusters via Portainer web user interface."
+    },
+    {
+      "title": "Proxmox",
+      "colour": "#fafbfc",
+      "url": "https://192.168.0.160:8006",
+      "description": "{\"enabled\":\"0\",\"override_url\":null,\"nodes\":null,\"ignore_tls\":\"0\",\"token_id\":null,\"token_value\":null}",
+      "appid": "391f2b7f3fe853e1ea09723eeafc354fa291ab48",
+      "appdescription": "Proxmox Virtual Environment is an open-source server virtualization environment. It allows deployment and management of virtual machines and containers"
+    },
+    {
+      "title": "HomeAssistant",
+      "colour": "#161b1f",
+      "url": "http://homeassistant.local:8123/",
+      "description": "{\"enabled\":\"0\",\"override_url\":null,\"token\":null,\"first_stat_label\":null,\"first_stat_template\":null,\"second_stat_label\":null,\"second_stat_template\":null}",
+      "appid": "5c81a4f5ee23ebffa0724a22a040c54e6cb9d7c5",
+      "appdescription": "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts."
+    },
+    {
+      "title": "Omada SDN Controller",
+      "colour": "#161b1f",
+      "url": "http://192.168.0.6",
+      "description": null,
+      "appid": "aeddfb31b642e8e30591a99b3b3c30b8a765be32",
+      "appdescription": "Omada’s Software Defined Networking (SDN) platform integrates network devices, including access points, switches and gateways, providing 100% centralized cloud management. Omada creates a highly scalable network—all controlled from a single interface. Seamless wireless and wired connections are provided, ideal for use in hospitality, education, retail, offices, and more."
+    },
+    {
+      "title": "Synology",
+      "colour": "#fafbfc",
+      "url": "http://toothless.local:5000",
+      "description": null,
+      "appid": "8521f6e426ad621f27a6b48be57a3c6056c9cfd3",
+      "appdescription": "Synology is a popular NAS appliance"
+    },
+    {
+      "title": "Grist",
+      "colour": "#161b1f",
+      "url": "http://192.168.0.241:8484",
+      "description": null,
+      "appid": "null",
+      "appdescription": null
+    },
+    {
+      "title": "Sovol SV07",
+      "colour": "#161b1f",
+      "url": "http://192.168.0.202",
+      "description": null,
+      "appid": "3d3221b2db3115d65e938a1c497f209256c6185f",
+      "appdescription": null
+    }
+  ]
