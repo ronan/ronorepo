@@ -9,6 +9,11 @@ services:
       - "80:80"
       - "8080:8080"
 
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
+
   dashboard:
     container_name: dashboard
     image: lscr.io/linuxserver/heimdall:latest
