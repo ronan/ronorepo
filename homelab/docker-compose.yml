@@ -4,9 +4,11 @@ services:
   ingress:
     container_name: ingress
     image: traefik
+    command: --api.insecure=true --providers.docker
     ports:
-      - 443:443
-      - 80:80
+      - "80:80"
+      - "8080:8080"
+      - "8888:8888"
 
   dashboard:
     container_name: dashboard
