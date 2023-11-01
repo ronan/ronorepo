@@ -1,7 +1,15 @@
 import time, board, neopixel, random
 from ulab import numpy as np
 
-num_leds = 50
+num_leds_dragon_belly = 5
+num_leds_dragon_fire = 50
+num_leds_bonfire = 25
+num_leds = 100
+num_leds_cauldron = 25
+
+FIRST_LED_BONFIRE = num_leds_dragon_fire
+FIRST_LED_CAULDRON = FIRST_LED_BONFIRE + num_leds_bonfire
+
 led_pin = board.D3
 
 gamma = [
@@ -25,67 +33,81 @@ gamma = [
     255
 ]
 
-fire_colors = (
-    (  0,  0,  0),
-    ( 18,  0,  0),
-    ( 18,  0,  0),
-    (113,  0,  0),
-    (113,  0,  0),
-    (142,  3,  1),
-    (175, 17,  1),
-    (213, 44,  2),
-    (255, 82,  4),
-    (255,115,  4),
-    (255,156,  4),
-    (255,203,  4),
-    (255,255,  4),
-    (255,255, 71),
-    (255,255,255),
-    (255,255,255)
-)
+def clamp(x, mn, mx):
+    return max(mn, min(mx, x))
+
 def fire(temp):
-    index = int(temp * 1024)
-    if temp < 255:
-        r = gamma[temp]
-        g = b = 0
-    elif temp < 40:
-        r = 255
-        g = gamma[temp - 255]
-        b = 0
-    elif temp < 76:
-        r = g = 255
-        b = gamma[temp - 510]
-    else:
-        r = g = b = 255
-        g = b = 200
+    temp = int(temp * 1024)
+
+    r_max = 250
+    g_max = 120
+    b_max = 120
+
+    return (
+        gamma[min(r_max, max(0, temp))],
+        gamma[min(g_max, max(0, temp - r_max))],
+        gamma[min(b_max, max(0, temp - r_max - g_max))]
+    )
+
     return (r, g, b)
 
-    # index = int(temp * 16)
-    # index = max(0, min(14, index))
-    # return fire_colors[index]
-    
 temps = [0.0] * num_leds
-leds = neopixel.NeoPixel(led_pin, num_leds, brightness=.5, auto_write=False)
+leds = neopixel.NeoPixel(led_pin, num_leds, brightness=.9, auto_write=False)
+# leds.fill(fire(0.3))
+# leds.show()
+# time.sleep(3.0)
+
+# while True:
+#     for i in range(100):
+#         temp = float(i)/100
+#         leds.fill(fire(temp))
+#         leds.show()
+#         time.sleep(0.1)
+
+# for i in range(num_leds):
+#     temp = float(i)/num_leds
+#     leds[i] = fire(temp)
+# leds.show()
+
+BELLY_MIN_TEMP = 0.1
+BELLY_MAX_TEMP = 0.9
+DRAGON_FLAME_MIN_TEMP = 0.3
+BONFIRE_MIN_TEMP = 0.3
+
+INVERSE_FRAME_RATE = .0333
+SPARK_TEMP = 0.3
+SPARK_RATE = 1.5
+SPREAD_RATE = 15.0
+COOLDOWN_RATE = .003
 
 last_time = time.monotonic()
 while True:
     now = time.monotonic()
     delta = now - last_time
-    last_time = now
 
-    for i in range(0, num_leds):
-        j = i - 1 % num_leds
-        spread = temps[j] * 50.0 * delta
-        temps[j] = temps[j] - spread
-        temps[i] = temps[i] + spread
+    if delta > INVERSE_FRAME_RATE:
+        last_time = now
 
-        cooldown = 0.3 * delta * random.random()
-        temps[i] = max(0, temps[i] - cooldown)
+        for i in range(1, num_leds_dragon_belly):
+            if random.random() < (SPARK_RATE * delta):
+                temps[i] += SPARK_TEMP
+            temps[i] = clamp(temps[i], BELLY_MIN_TEMP, BELLY_MAX_TEMP)
 
-        if i <= 5 and random.random() < (2 * delta):
-            temps[i] = min(1.0, temps[i] + 1.0)
+        for i in range(1, num_leds):
+            j = i - 1 % num_leds
 
-        leds[i] = fire(temps[i])
-        if i < 5:
-            leds[i] = fire(0.3 + (random.random() * .1))
-    leds.show()
+            spread   = temps[j] * SPREAD_RATE * delta
+            cooldown = temps[i] * COOLDOWN_RATE * delta
+            temps[j] = temps[j] - spread
+            temps[i] = temps[i] + spread - cooldown
+
+            if i >= FIRST_LED_BONFIRE:
+                temps[i] = max(temps[i], BONFIRE_MIN_TEMP)
+
+            leds[i] = fire(temps[i])
+
+            if i >= FIRST_LED_CAULDRON:
+                leds[i] = fire(0.2 + (random.random() * .2))
+                leds[i] = (leds[i][2], leds[i][0], leds[i][1])
+
+        leds.show()
