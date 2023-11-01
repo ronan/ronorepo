@@ -19,7 +19,7 @@ services:
   whoami:
     image: traefik/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.homelab`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
 
   dashboard:
     image: lscr.io/linuxserver/heimdall:latest
