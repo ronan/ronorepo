@@ -12,7 +12,7 @@ services:
     
   mdns:
     image: hardillb/traefik-avahi-helper
-  volumes:
+    volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 
