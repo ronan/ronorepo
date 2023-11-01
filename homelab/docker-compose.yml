@@ -14,7 +14,7 @@ services:
   whoami:
     image: traefik/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.homelab`)"
 
   dashboard:
     container_name: dashboard
