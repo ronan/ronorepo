@@ -13,10 +13,7 @@ services:
   mdns:
     image: flungo/avahi
     restart: unless-stopped
-    command: [ "/usr/bin/avahi-publish-address", "whoami.local", "-R", "192.168.0.250" ]
-
-    # build: 
-      # dockerfile: mdns.containerfile
+    command: [ "/usr/bin/avahi-publish", "-a", "whoami.local", "-R", "192.168.0.250" ]
 
   whoami:
     image: traefik/whoami
