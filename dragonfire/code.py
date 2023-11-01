@@ -1,5 +1,5 @@
+# pyright: reportShadowedImports=false, reportMissingImports=false
 import time, board, neopixel, random
-from ulab import numpy as np
 
 num_leds_dragon_belly = 5
 num_leds_dragon_fire = 50
