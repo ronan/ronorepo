@@ -2,7 +2,7 @@ version: '3'
 
 services:
   portainer:
-    restart: always
+    restart: unless-stopped
     image: portainer/portainer-ce
     container_name: portainer
     command: --admin-password="$$2y$$05$$fYCR24U4ejjjIFmgdK3/fO7pqsjzUOypQbfsr0O.wm2c27yIuyNYG"
@@ -10,8 +10,8 @@ services:
       - "8000:8000"
       - "9443:9443"
     volumes:
-      - /opt/docker/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/docker/portainer/data:/data
 
   # ingress:
   #   image: traefik
