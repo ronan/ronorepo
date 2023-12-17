@@ -22,15 +22,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     
-  mdns:
-    build: 
-      dockerfile: mdns.containerfile
-    restart: unless-stopped
+  # mdns:
+  #   build: 
+  #     dockerfile: mdns.containerfile
+  #   restart: unless-stopped
 
-  whoami:
-    image: traefik/whoami
-    labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
+  # whoami:
+  #   image: traefik/whoami
+  #   labels:
+  #     - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
 
   dashboard:
     image: lscr.io/linuxserver/heimdall:latest
