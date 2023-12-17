@@ -3,7 +3,6 @@
 ARCH="amd64";
 DIST="debian.12~bookworm_$ARCH"
 BASE="https://download.docker.com/linux/debian/dists/bookworm/pool/stable/$ARCH";
-PASS=`docker run --rm httpd:2.4-alpine htpasswd -nbB admin "portaineradmin" | cut -d ":" -f 2`;
 
 $PKGS=(
   "containerd.io_1.6.26-1_$ARCH.deb"
@@ -18,6 +17,7 @@ for pkg in $PKGS; do
   sudo dpkg -i /tmp/$pkg
 done
 
+PASS=`docker run --rm httpd:2.4-alpine htpasswd -nbB admin "portaineradmin" | cut -d ":" -f 2`;
 echo $PASS > ~/portainer-admin-password.txt
 sudo docker-composer up -f ./docker-compose.yml
 
