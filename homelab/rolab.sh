@@ -20,8 +20,8 @@ PASS=`docker run --rm httpd:2.4-alpine htpasswd -nbB admin "portaineradmin" | cu
 echo $PASS > ~/portainer-admin-password.txt
 docker-compose up -f ./docker-compose.yml
 
-# sudo docker run -d -p 8000:80 -p 9443:443 \
-#           --name portainer --restart=always \
-#           -v /var/run/docker.sock:/var/run/docker.sock \
-#           -v portainer_data:/data portainer/portainer-ce:latest \
-#           --admin-password="$ENC";
+sudo docker run -d -p 8000:80 -p 9443:443 \
+          --name portainer --restart=always \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v portainer_data:/data portainer/portainer-ce:latest \
+          --admin-password="$PASS";
