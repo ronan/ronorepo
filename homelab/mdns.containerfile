@@ -1,7 +1,10 @@
-FROM docker.io/library/python:3
+FROM debian
 
 RUN apt-get update && apt-get install avahi-utils -y
 
-RUN pip install zeroconf
+ADD entrypoint.sh /opt/entrypoint.sh
+ADD mdns.service  /etc/systemd/system/mdns.service
+ADD avahi-daemon.conf  /etc/avahi/avahi-daemon.conf
+RUN chmod 755 /etc/systemd/system/mdns.service;
 
-CMD [ "/usr/bin/avahi-publish-address", "whoami.local", "-R", "192.168.0.250" ]
+ENTRYPOINT ["/opt/entrypoint.sh"]

@@ -60,3 +60,17 @@ docker run \
     -v portainer_data:/data portainer/portainer-ce:latest
 
 ```
+
+## Home Lab First Server
+Name:       rolab1
+Address:    rolab1.local
+Hardware:   HP1
+
+
+### Install process
+
+- Install Proxmox
+  - https://enterprise.proxmox.com/iso/proxmox-ve_8.1-1.iso
+- Pull and load docker-compose.yml
+- Ansible?
+- 
