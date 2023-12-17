@@ -38,11 +38,11 @@ services:
     ports:
       - 8888:80
 
-  dayboard:
-    build: 
-      context: ../dayboard
-      dockerfile: containerfile
-    restart: unless-stopped
-    ports:
-      - 80
+  # dayboard:
+  #   build: 
+  #     context: ../dayboard
+  #     dockerfile: containerfile
+  #   restart: unless-stopped
+  #   ports:
+  #     - 80
 
