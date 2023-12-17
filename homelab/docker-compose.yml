@@ -13,36 +13,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/docker/portainer/data:/data
 
-  ingress:
-    image: traefik
-    command: --api.insecure=true --pguroviders.docker
+  dashboard:
+    image: lscr.io/linuxserver/heimdall:latest
+    restart: unless-stopped
     ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - 8888:80
+
+  dayboard:
+    build: 
+      context: ../dayboard
+      dockerfile: containerfile
+    restart: unless-stopped
+    ports:
+      - 80
+ 
+# ingress:
+#   image: traefik
+#   command: --api.insecure=true --pguroviders.docker
+#   ports:
+#     - "80:80"
+#     - "8080:8080"
+#   volumes:
+#     - /var/run/docker.sock:/var/run/docker.sock
     
-  # # mdns:
-  # #   build: 
-  # #     dockerfile: mdns.containerfile
-  # #   restart: unless-stopped
+# mdns:
+#   build: 
+#     dockerfile: mdns.containerfile
+#   restart: unless-stopped
 
-  # # whoami:
-  # #   image: traefik/whoami
-  # #   labels:
-  # #     - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
-
-  # dashboard:
-  #   image: lscr.io/linuxserver/heimdall:latest
-  #   restart: unless-stopped
-  #   ports:
-  #     - 8888:80
-
-  # dayboard:
-  #   build: 
-  #     context: ../dayboard
-  #     dockerfile: containerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - 80
-
+# whoami:
+#   image: traefik/whoami
+#   labels:
+#     - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
