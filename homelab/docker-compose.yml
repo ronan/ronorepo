@@ -2,7 +2,7 @@ version: '3'
 
 services:
   portainer:
-    restart: unless-stopped
+    restart: unless-stoppedgit
     image: portainer/portainer-ce
     container_name: portainer
     command: --admin-password="$$2y$$05$$fYCR24U4ejjjIFmgdK3/fO7pqsjzUOypQbfsr0O.wm2c27yIuyNYG"
@@ -13,14 +13,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/docker/portainer/data:/data
 
-  # ingress:
-  #   image: traefik
-  #   command: --api.insecure=true --providers.docker
-  #   ports:
-  #     - "80:80"
-  #     - "8080:8080"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
+  ingress:
+    image: traefik
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     
   # # mdns:
   # #   build: 
