@@ -13,30 +13,30 @@ services:
       - /opt/docker/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
 
-  ingress:
-    image: traefik
-    command: --api.insecure=true --providers.docker
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+  # ingress:
+  #   image: traefik
+  #   command: --api.insecure=true --providers.docker
+  #   ports:
+  #     - "80:80"
+  #     - "8080:8080"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
     
-  # mdns:
-  #   build: 
-  #     dockerfile: mdns.containerfile
+  # # mdns:
+  # #   build: 
+  # #     dockerfile: mdns.containerfile
+  # #   restart: unless-stopped
+
+  # # whoami:
+  # #   image: traefik/whoami
+  # #   labels:
+  # #     - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
+
+  # dashboard:
+  #   image: lscr.io/linuxserver/heimdall:latest
   #   restart: unless-stopped
-
-  # whoami:
-  #   image: traefik/whoami
-  #   labels:
-  #     - "traefik.http.routers.whoami.rule=Host(`whoami.local`)"
-
-  dashboard:
-    image: lscr.io/linuxserver/heimdall:latest
-    restart: unless-stopped
-    ports:
-      - 8888:80
+  #   ports:
+  #     - 8888:80
 
   # dayboard:
   #   build: 
