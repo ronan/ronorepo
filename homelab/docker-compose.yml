@@ -5,7 +5,7 @@ services:
     restart: always
     image: portainer/portainer-ce
     container_name: portainer
-    command: --admin-password-file=~/portainer-admin-password.txt
+    command: --admin-password="$2y$05$fYCR24U4ejjjIFmgdK3/fO7pqsjzUOypQbfsr0O.wm2c27yIuyNYG"
     ports:
       - "8000:8000"
       - "9443:9443"
