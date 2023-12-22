@@ -74,7 +74,7 @@ def get_geocode():
         g = geocoder.ip('me')
         geocode = {
             "latitude":  g.latlng[0],
-            "longitude": g.latlng[0],
+            "longitude": g.latlng[1],
             "timezone":  g.raw.get('timezone', 'UTC')
         }
         print(f"Geolocated at {geocode['latitude']}, {geocode['longitude']} {geocode['timezone']}")
