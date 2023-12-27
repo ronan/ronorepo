@@ -4,8 +4,9 @@ ARCH="amd64";
 DIST="debian.12~bookworm_$ARCH"
 BASE="https://download.docker.com/linux/debian/dists/bookworm/pool/stable/$ARCH";
 
-DEBIAN_FRONTEND=noninteractive apt-get
+DEBIAN_FRONTEND=noninteractive;
 
+apt-get
 apt-get update; apg-get upgrade;
 apt-get install git curl;
 
