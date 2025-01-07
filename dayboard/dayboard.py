@@ -99,8 +99,8 @@ def get_colors():
         temps = requests.get(f"https://api.open-meteo.com/v1/forecast?{qs}").json()
         pp(temps)
         for i in range(NUM_HOURS):
-            idx = math.floor((temps['hourly']['apparent_temperature'][i + DAY_START]+ 40) / 10)
-            colors[i*LEDS_PER_HOUR:(i*LEDS_PER_HOUR)+LEDS_PER_HOUR] = [COLOR_TEMPS[18-idx]] * LEDS_PER_HOUR
+            idx = math.floor((temps['hourly']['apparent_temperature'][i + DAY_START] + 40) / 10)
+            colors[i*LEDS_PER_HOUR:(i*LEDS_PER_HOUR)+LEDS_PER_HOUR] = [COLOR_TEMPS[idx]] * LEDS_PER_HOUR
 
         cache('colors', colors)
     return colors
