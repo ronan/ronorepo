@@ -25,8 +25,12 @@ services:
       - 8888:80
 
   dayboard:
-    image: ronan4000/dayboard
+    build: 
+      context: ../dayboard
+      dockerfile: containerfile
     restart: unless-stopped
+    ports:
+      - 80
  
 # ingress:
 #   image: traefik
